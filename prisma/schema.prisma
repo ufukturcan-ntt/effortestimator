@@ -58,6 +58,8 @@ model Project {
 
   scopeAnswers ScopeAnswer[]
 
+modules ProjectModule[]
+
   createdAt   DateTime      @default(now())
   updatedAt   DateTime      @updatedAt
 }
