@@ -45,7 +45,11 @@ export default async function ProjectPage({ params }: Props) {
 
           <tr>
             <td>Tarih</td>
-            <td>{project.projectDate}</td>
+            <td>
+  {project.projectDate
+    ? new Date(project.projectDate).toLocaleDateString("tr-TR")
+    : ""}
+</td>
           </tr>
 
           <tr>
