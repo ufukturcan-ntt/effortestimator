@@ -73,3 +73,17 @@ model ScopeAnswer {
 
   createdAt DateTime @default(now())
 }
+
+model ProjectModule {
+  id        String   @id @default(cuid())
+
+  projectId String
+  module    String
+
+  project Project @relation(
+    fields: [projectId],
+    references: [id]
+  )
+
+  createdAt DateTime @default(now())
+}
