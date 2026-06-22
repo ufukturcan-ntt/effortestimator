@@ -20,7 +20,7 @@ export default async function ProjectPage({ params }: Props) {
 
   return (
     <div style={{ padding: 40 }}>
-      <h1>{project.projectNumber}</h1>
+      <h1>{project.projectNo}</h1>
 
       <h2>{project.projectName}</h2>
 
@@ -35,7 +35,7 @@ export default async function ProjectPage({ params }: Props) {
         <tbody>
           <tr>
             <td>Müşteri</td>
-            <td>{project.customerName}</td>
+            <td>{project.customer}</td>
           </tr>
 
           <tr>
