@@ -31,13 +31,15 @@ export async function POST(request: Request) {
     );
   }
 
-  if (user.status !== "APPROVED") {
-    return NextResponse.redirect(
-      new URL("/pending-approval", request.url)
-    );
-  }
-
+if (user.status !== "APPROVED") {
   return NextResponse.redirect(
-    new URL("/dashboard", request.url)
+    new URL("/pending-approval", request.url),
+    303
   );
+}
+
+return NextResponse.redirect(
+  new URL("/dashboard", request.url),
+  303
+);
 }
