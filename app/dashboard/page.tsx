@@ -43,9 +43,24 @@ export default async function DashboardPage() {
                 <td>{project.industry}</td>
                 <td>{project.status}</td>
                 <td>{project.createdAt.toLocaleDateString("tr-TR")}</td>
-                <td>
-                  <a href={`/project/${project.id}`}>Görüntüle</a>
-                </td>
+<td>
+  <a href={`/project/${project.id}`}>Görüntüle</a>
+
+  <form
+    method="post"
+    action="/api/project/delete"
+    style={{ display: "inline", marginLeft: 12 }}
+  >
+    <input
+      type="hidden"
+      name="projectId"
+      value={project.id}
+    />
+    <button type="submit">
+      Sil
+    </button>
+  </form>
+</td>
               </tr>
             ))}
           </tbody>
