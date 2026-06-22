@@ -44,9 +44,19 @@ model Project {
   customer    String
   status      ProjectStatus @default(DRAFT)
 
+  language              String
+  projectDate           DateTime
+  industry              String
+  implementationType    String
+  systemType            String
+  preparedBy            String
+  version               String
+  notes                 String?
+
   createdById String
   createdBy   User          @relation(fields: [createdById], references: [id])
 
   createdAt   DateTime      @default(now())
   updatedAt   DateTime      @updatedAt
+}
 }
