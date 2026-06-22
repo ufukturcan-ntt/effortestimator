@@ -51,5 +51,5 @@ export async function POST(request: Request) {
     },
   });
 
-  return NextResponse.redirect(new URL("/register/success", request.url));
+return NextResponse.redirect(new URL("/register/success", request.url), 303);
 }
