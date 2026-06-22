@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "@auth/prisma-adapter": "latest",
-    "@prisma/client": "latest",
+"@prisma/client": "^6.15.0",
     "bcryptjs": "latest",
     "next": "latest",
     "next-auth": "latest",
@@ -28,7 +28,7 @@
     "@types/react-dom": "latest",
     "eslint": "latest",
     "eslint-config-next": "latest",
-    "prisma": "latest",
+"prisma": "^6.15.0",
     "typescript": "latest"
   }
 }
