@@ -59,3 +59,15 @@ model Project {
   createdAt   DateTime      @default(now())
   updatedAt   DateTime      @updatedAt
 }
+
+model ScopeAnswer {
+  id        String   @id @default(cuid())
+
+  projectId String
+  project   Project  @relation(fields: [projectId], references: [id])
+
+  question  String
+  answer    String
+
+  createdAt DateTime @default(now())
+}
