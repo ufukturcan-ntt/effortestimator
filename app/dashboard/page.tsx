@@ -48,17 +48,20 @@ export default async function DashboardPage() {
 
   <form
     method="post"
+    action="/api/project/copy"
+    style={{ display: "inline", marginLeft: 12 }}
+  >
+    <input type="hidden" name="projectId" value={project.id} />
+    <button type="submit">Referans Al</button>
+  </form>
+
+  <form
+    method="post"
     action="/api/project/delete"
     style={{ display: "inline", marginLeft: 12 }}
   >
-    <input
-      type="hidden"
-      name="projectId"
-      value={project.id}
-    />
-    <button type="submit">
-      Sil
-    </button>
+    <input type="hidden" name="projectId" value={project.id} />
+    <button type="submit">Sil</button>
   </form>
 </td>
               </tr>
