@@ -4,7 +4,7 @@ export default function DashboardPage() {
       <h1>EffortEstimator Dashboard</h1>
 
       <ul>
-        <li>Yeni Çalışma</li>
+        <li><a href="/project/new">Yeni Çalışma</a></li>
         <li>Çalışmalarım</li>
         <li>Referans Al</li>
         <li>Sil</li>
