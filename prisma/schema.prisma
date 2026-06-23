@@ -58,7 +58,8 @@ model Project {
 
   scopeAnswers ScopeAnswer[]
   modules      ProjectModule[]
-localizations ProjectLocalization[]
+  localizations ProjectLocalization[]
+  developments ProjectDevelopment[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -88,6 +89,19 @@ model ProjectLocalization {
   projectId String
   country   String
   createdAt DateTime @default(now())
+
+  project Project @relation(fields: [projectId], references: [id])
+}
+
+model ProjectDevelopment {
+  id          String   @id @default(cuid())
+  projectId   String
+  type        String
+  description String
+  quantity    Int
+  complexity  String
+  effort      Int
+  createdAt   DateTime @default(now())
 
   project Project @relation(fields: [projectId], references: [id])
 }
