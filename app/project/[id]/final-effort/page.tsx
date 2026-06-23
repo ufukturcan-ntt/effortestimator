@@ -1,5 +1,4 @@
 import { prisma } from "@/lib/prisma";
-import { getModuleEffort, getLocalizationEffort } from "@/lib/effort-calculator";
 
 export const dynamic = "force-dynamic";
 
@@ -20,12 +19,28 @@ export default async function FinalEffortPage({
     },
   });
 
-  if (!project) return <main style={{ padding: 40 }}>Proje bulunamadı.</main>;
+  if (!project) {
+    return <main style={{ padding: 40 }}>Proje bulunamadı.</main>;
+  }
+
+  const catalogue = await prisma.effortCatalogue.findMany({
+    where: {
+      isActive: true,
+    },
+  });
+
+  function getCatalogueEffort(category: string, name: string) {
+    return (
+      catalogue.find(
+        (item) => item.category === category && item.name === name
+      )?.effort ?? 0
+    );
+  }
 
   const moduleEffort = project.modules.map((item) => ({
     group: "Project Effort",
     item: item.module,
-    effort: getModuleEffort(item.module),
+    effort: getCatalogueEffort("MODULE", item.module),
   }));
 
   const hypercareEffort = project.hypercareItems.map((item) => ({
@@ -34,15 +49,12 @@ export default async function FinalEffortPage({
     effort: item.effort,
   }));
 
-  const projectEffort = [
-    ...moduleEffort,
-    ...hypercareEffort,
-  ];
+  const projectEffort = [...moduleEffort, ...hypercareEffort];
 
   const localizationEffort = project.localizations.map((item) => ({
     group: "Localization Effort",
     item: item.country,
-    effort: getLocalizationEffort(item.country),
+    effort: getCatalogueEffort("LOCALIZATION", item.country),
   }));
 
   const developmentEffort = project.developments.map((item) => ({
@@ -57,10 +69,10 @@ export default async function FinalEffortPage({
     ...developmentEffort,
   ];
 
-  const total = rows.reduce((sum, row) => sum + row.effort, 0);
   const projectTotal = projectEffort.reduce((sum, row) => sum + row.effort, 0);
   const localizationTotal = localizationEffort.reduce((sum, row) => sum + row.effort, 0);
   const developmentTotal = developmentEffort.reduce((sum, row) => sum + row.effort, 0);
+  const total = rows.reduce((sum, row) => sum + row.effort, 0);
 
   return (
     <main style={{ maxWidth: 1000, margin: "40px auto", fontFamily: "Arial" }}>
@@ -94,44 +106,36 @@ export default async function FinalEffortPage({
             <td colSpan={2}><strong>Project Effort Toplamı</strong></td>
             <td><strong>{projectTotal}</strong></td>
           </tr>
-                    
           <tr>
             <td colSpan={2}><strong>Localization Effort Toplamı</strong></td>
             <td><strong>{localizationTotal}</strong></td>
           </tr>
-                    
           <tr>
             <td colSpan={2}><strong>Development Effort Toplamı</strong></td>
             <td><strong>{developmentTotal}</strong></td>
           </tr>
-          
           <tr>
-            <td colSpan={2}>
-              <strong>Toplam</strong>
-            </td>
-            <td>
-              <strong>{total}</strong>
-            </td>
+            <td colSpan={2}><strong>Genel Toplam</strong></td>
+            <td><strong>{total}</strong></td>
           </tr>
-          
         </tbody>
       </table>
 
-<div style={{ marginTop: 24 }}>
-  <a href={`/project/${project.id}`}>Project Information</a>
-  {" | "}
-  <a href={`/project/${project.id}/scope`}>Scope</a>
-  {" | "}
-  <a href={`/project/${project.id}/modules`}>Modules</a>
-  {" | "}
-  <a href={`/project/${project.id}/localizations`}>Localization</a>
-  {" | "}
-  <a href={`/project/${project.id}/developments`}>Development</a>
-  {" | "}
-  <a href={`/project/${project.id}/hypercare`}>Hypercare</a>
-  {" | "}
-  <a href="/dashboard">Dashboard</a>
-</div>
+      <div style={{ marginTop: 24 }}>
+        <a href={`/project/${project.id}`}>Project Information</a>
+        {" | "}
+        <a href={`/project/${project.id}/scope`}>Scope</a>
+        {" | "}
+        <a href={`/project/${project.id}/modules`}>Modules</a>
+        {" | "}
+        <a href={`/project/${project.id}/localizations`}>Localization</a>
+        {" | "}
+        <a href={`/project/${project.id}/developments`}>Development</a>
+        {" | "}
+        <a href={`/project/${project.id}/hypercare`}>Hypercare</a>
+        {" | "}
+        <a href="/dashboard">Dashboard</a>
+      </div>
     </main>
   );
 }
