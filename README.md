@@ -4,3 +4,4 @@ Deployment trigger
 NextJS deployment trigger
 Database initialization
 Railway public connection
+ 
