@@ -115,3 +115,13 @@ model ProjectHypercare {
 
   project Project @relation(fields: [projectId], references: [id])
 }
+
+model EffortCatalogue {
+  id        String   @id @default(cuid())
+  category  String
+  code      String
+  name      String
+  effort    Int
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+}
