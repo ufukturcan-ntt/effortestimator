@@ -97,9 +97,21 @@ export default async function FinalEffortPage({
         </tbody>
       </table>
 
-      <p style={{ marginTop: 24 }}>
-        <a href="/dashboard">Dashboard&apos;a dön</a>
-      </p>
+<div style={{ marginTop: 24 }}>
+  <a href={`/project/${project.id}`}>Project Information</a>
+  {" | "}
+  <a href={`/project/${project.id}/scope`}>Scope</a>
+  {" | "}
+  <a href={`/project/${project.id}/modules`}>Modules</a>
+  {" | "}
+  <a href={`/project/${project.id}/localizations`}>Localization</a>
+  {" | "}
+  <a href={`/project/${project.id}/developments`}>Development</a>
+  {" | "}
+  <a href={`/project/${project.id}/hypercare`}>Hypercare</a>
+  {" | "}
+  <a href="/dashboard">Dashboard</a>
+</div>
     </main>
   );
 }
