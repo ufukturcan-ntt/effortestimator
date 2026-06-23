@@ -42,10 +42,23 @@ export default async function ProjectDetailPage({
       </table>
 
       <div style={{ marginTop: 24 }}>
-        <a href={`/project/${project.id}/scope`}>Scope&apos;a Devam Et →</a>
+        <a href={`/project/${project.id}/edit`}>
+          Project Information Düzenle
+        </a>
+      
         <br />
         <br />
-        <a href="/dashboard">Dashboard&apos;a dön</a>
+      
+        <a href={`/project/${project.id}/scope`}>
+          Scope'a Devam Et →
+        </a>
+      
+        <br />
+        <br />
+      
+        <a href="/dashboard">
+          Dashboard'a dön
+        </a>
       </div>
     </main>
   );
