@@ -30,8 +30,8 @@ export async function POST(request: Request) {
     });
   }
 
-  return NextResponse.redirect(
-    new URL(`/project/${projectId}/final-effort`, request.url),
-    303
-  );
+return NextResponse.redirect(
+  new URL(`/project/${projectId}/hypercare`, request.url),
+  303
+);
 }
