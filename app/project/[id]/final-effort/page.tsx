@@ -58,6 +58,9 @@ export default async function FinalEffortPage({
   ];
 
   const total = rows.reduce((sum, row) => sum + row.effort, 0);
+  const projectTotal = projectEffort.reduce((sum, row) => sum + row.effort, 0);
+  const localizationTotal = localizationEffort.reduce((sum, row) => sum + row.effort, 0);
+  const developmentTotal = developmentEffort.reduce((sum, row) => sum + row.effort, 0);
 
   return (
     <main style={{ maxWidth: 1000, margin: "40px auto", fontFamily: "Arial" }}>
@@ -88,6 +91,21 @@ export default async function FinalEffortPage({
           ))}
 
           <tr>
+            <td colSpan={2}><strong>Project Effort Toplamı</strong></td>
+            <td><strong>{projectTotal}</strong></td>
+          </tr>
+                    
+          <tr>
+            <td colSpan={2}><strong>Localization Effort Toplamı</strong></td>
+            <td><strong>{localizationTotal}</strong></td>
+          </tr>
+                    
+          <tr>
+            <td colSpan={2}><strong>Development Effort Toplamı</strong></td>
+            <td><strong>{developmentTotal}</strong></td>
+          </tr>
+          
+          <tr>
             <td colSpan={2}>
               <strong>Toplam</strong>
             </td>
@@ -95,6 +113,7 @@ export default async function FinalEffortPage({
               <strong>{total}</strong>
             </td>
           </tr>
+          
         </tbody>
       </table>
 
