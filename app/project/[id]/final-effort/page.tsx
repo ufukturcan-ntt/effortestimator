@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma";
+import { getModuleEffort, getLocalizationEffort } from "@/lib/effort-calculator";
 
 export const dynamic = "force-dynamic";
 
@@ -24,7 +25,7 @@ export default async function FinalEffortPage({
   const moduleEffort = project.modules.map((item) => ({
     group: "Project Effort",
     item: item.module,
-    effort: 10,
+    effort: getModuleEffort(item.module),
   }));
 
   const hypercareEffort = project.hypercareItems.map((item) => ({
@@ -41,7 +42,7 @@ export default async function FinalEffortPage({
   const localizationEffort = project.localizations.map((item) => ({
     group: "Localization Effort",
     item: item.country,
-    effort: 5,
+    effort: getLocalizationEffort(item.country),
   }));
 
   const developmentEffort = project.developments.map((item) => ({
