@@ -60,7 +60,7 @@ model Project {
   modules      ProjectModule[]
   localizations ProjectLocalization[]
   developments ProjectDevelopment[]
-
+  hypercareItems ProjectHypercare[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -102,6 +102,16 @@ model ProjectDevelopment {
   complexity  String
   effort      Int
   createdAt   DateTime @default(now())
+
+  project Project @relation(fields: [projectId], references: [id])
+}
+
+model ProjectHypercare {
+  id        String   @id @default(cuid())
+  projectId String
+  item      String
+  effort    Int
+  createdAt DateTime @default(now())
 
   project Project @relation(fields: [projectId], references: [id])
 }
