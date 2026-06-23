@@ -15,16 +15,28 @@ export default async function FinalEffortPage({
       modules: true,
       localizations: true,
       developments: true,
+      hypercareItems: true,
     },
   });
 
   if (!project) return <main style={{ padding: 40 }}>Proje bulunamadı.</main>;
 
-  const projectEffort = project.modules.map((item) => ({
+  const moduleEffort = project.modules.map((item) => ({
     group: "Project Effort",
     item: item.module,
     effort: 10,
   }));
+
+  const hypercareEffort = project.hypercareItems.map((item) => ({
+    group: "Project Effort",
+    item: item.item,
+    effort: item.effort,
+  }));
+
+  const projectEffort = [
+    ...moduleEffort,
+    ...hypercareEffort,
+  ];
 
   const localizationEffort = project.localizations.map((item) => ({
     group: "Localization Effort",
@@ -51,7 +63,12 @@ export default async function FinalEffortPage({
       <h1>Final Effort</h1>
       <h2>{project.projectNo} - {project.projectName}</h2>
 
-      <table border={1} cellPadding={8} cellSpacing={0} style={{ borderCollapse: "collapse", width: "100%" }}>
+      <table
+        border={1}
+        cellPadding={8}
+        cellSpacing={0}
+        style={{ borderCollapse: "collapse", width: "100%" }}
+      >
         <thead>
           <tr>
             <th>Grup</th>
@@ -59,6 +76,7 @@ export default async function FinalEffortPage({
             <th>Efor</th>
           </tr>
         </thead>
+
         <tbody>
           {rows.map((row, index) => (
             <tr key={index}>
@@ -67,9 +85,14 @@ export default async function FinalEffortPage({
               <td>{row.effort}</td>
             </tr>
           ))}
+
           <tr>
-            <td colSpan={2}><strong>Toplam</strong></td>
-            <td><strong>{total}</strong></td>
+            <td colSpan={2}>
+              <strong>Toplam</strong>
+            </td>
+            <td>
+              <strong>{total}</strong>
+            </td>
           </tr>
         </tbody>
       </table>
