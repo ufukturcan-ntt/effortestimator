@@ -139,3 +139,33 @@ model SelectionOption {
 
   @@unique([category, value])
 }
+
+model ScopeQuestion {
+  id          String   @id @default(cuid())
+  code        String   @unique
+  category    String
+  question    String
+  answerType  String
+  sortOrder   Int      @default(0)
+  isActive    Boolean  @default(true)
+
+  industry            String?
+  implementationType  String?
+  systemType          String?
+
+  createdAt DateTime @default(now())
+}
+
+model ScopeQuestionOption {
+  id          String   @id @default(cuid())
+  questionId  String
+  value       String
+  label       String
+  effort      Int      @default(0)
+  sortOrder   Int      @default(0)
+
+  question ScopeQuestion @relation(
+    fields: [questionId],
+    references: [id]
+  )
+}
