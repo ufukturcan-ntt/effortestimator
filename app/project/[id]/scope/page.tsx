@@ -2,24 +2,6 @@ import { prisma } from "@/lib/prisma";
 
 export const dynamic = "force-dynamic";
 
-const baseQuestions = [
-  "Scope kapsamında kaç şirket kodu yer alacak?",
-  "Scope kapsamında kaç üretim yeri yer alacak?",
-  "Scope kapsamında kaç depo yeri yer alacak?",
-  "Scope kapsamında kaç SAP kullanıcısı olacak?",
-  "Scope kapsamında kaç ülke yer alacak?"
-];
-
-const fashionQuestions = [
-  "Fashion Vertical Business kullanılacak mı?",
-  "Beden-renk-varyant yapısı kullanılacak mı?"
-];
-
-const steelQuestions = [
-  "Demir & Çelik sektörüne özel üretim süreçleri var mı?",
-  "Kalite/sertifika süreçleri kapsamda mı?"
-];
-
 export default async function ScopePage({
   params,
 }: {
@@ -36,18 +18,36 @@ export default async function ScopePage({
     return <main style={{ padding: 40 }}>Çalışma bulunamadı.</main>;
   }
 
-  const questions = [...baseQuestions];
-
-  if (project.industry === "Fashion") {
-    questions.push(...fashionQuestions);
-  }
-
-  if (project.industry === "Demir & Çelik") {
-    questions.push(...steelQuestions);
-  }
+  const questions = await prisma.scopeQuestion.findMany({
+    where: {
+      isActive: true,
+      OR: [
+        {
+          industry: null,
+          implementationType: null,
+          systemType: null,
+        },
+        {
+          industry: project.industry,
+        },
+        {
+          implementationType: project.implementationType,
+        },
+        {
+          systemType: project.systemType,
+        },
+      ],
+    },
+    include: {
+      options: {
+        orderBy: { sortOrder: "asc" },
+      },
+    },
+    orderBy: { sortOrder: "asc" },
+  });
 
   return (
-    <main style={{ maxWidth: 800, margin: "40px auto", fontFamily: "Arial" }}>
+    <main style={{ maxWidth: 900, margin: "40px auto", fontFamily: "Arial" }}>
       <h1>Scope</h1>
       <h2>{project.projectNo} - {project.projectName}</h2>
 
@@ -56,19 +56,39 @@ export default async function ScopePage({
 
         {questions.map((question) => {
           const existing = project.scopeAnswers.find(
-            (item) => item.question === question
+            (item) => item.question === question.code
           );
 
           return (
-            <div key={question} style={{ marginBottom: 16 }}>
-              <label>{question} *</label>
+            <div key={question.id} style={{ marginBottom: 16 }}>
+              <label>{question.question} *</label>
               <br />
-              <input
-                name={question}
-                required
-                defaultValue={existing?.answer || ""}
-                style={{ width: "100%", padding: 8 }}
-              />
+
+              {question.answerType === "NUMBER" ? (
+                <input
+                  name={question.code}
+                  type="number"
+                  required
+                  defaultValue={existing?.answer || ""}
+                  style={{ width: "100%", padding: 8 }}
+                />
+              ) : (
+                <select
+                  name={question.code}
+                  required
+                  defaultValue={existing?.answer || ""}
+                  style={{ width: "100%", padding: 8 }}
+                >
+                  <option value="" disabled>
+                    Seçiniz
+                  </option>
+                  {question.options.map((option) => (
+                    <option key={option.id} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </select>
+              )}
             </div>
           );
         })}
