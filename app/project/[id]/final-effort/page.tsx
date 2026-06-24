@@ -38,6 +38,12 @@ const project = await prisma.project.findUnique({
     );
   }
 
+const scopeQuestions = await prisma.scopeQuestion.findMany({
+  include: {
+    options: true,
+  },
+});
+  
   const moduleEffort = project.modules.map((item) => ({
     group: "Project Effort",
     item: item.module,
@@ -58,23 +64,50 @@ const project = await prisma.project.findUnique({
     effort: getCatalogueEffort("LOCALIZATION", item.country),
   }));
 
+const scopeEffort = project.scopeAnswers.map((answer) => {
+  const question = scopeQuestions.find(
+    (q) => q.code === answer.question
+  );
+
+  const option = question?.options.find(
+    (o) => o.value === answer.answer
+  );
+
+  return {
+    group: "Scope Effort",
+    item: question?.question || answer.question,
+    effort: option?.effort ?? 0,
+  };
+});
+  
   const developmentEffort = project.developments.map((item) => ({
     group: "Development Effort",
     item: `${item.type} - ${item.description}`,
     effort: item.quantity * item.effort,
   }));
 
-  const rows = [
-    ...projectEffort,
-    ...localizationEffort,
-    ...developmentEffort,
-  ];
+const rows = [
+  ...projectEffort,
+  ...scopeEffort,
+  ...localizationEffort,
+  ...developmentEffort,
+];
 
   const projectTotal = projectEffort.reduce((sum, row) => sum + row.effort, 0);
   const localizationTotal = localizationEffort.reduce((sum, row) => sum + row.effort, 0);
+<tr>
+  <td colSpan={2}>
+    <strong>Scope Effort Toplamı</strong>
+  </td>
+  <td>
+    <strong>{scopeTotal}</strong>
+  </td>
+</tr>
+  
   const developmentTotal = developmentEffort.reduce((sum, row) => sum + row.effort, 0);
   const total = rows.reduce((sum, row) => sum + row.effort, 0);
-
+  const scopeTotal = scopeEffort.reduce((sum, row) => sum + row.effort,0);
+  
   return (
     <main style={{ maxWidth: 1000, margin: "40px auto", fontFamily: "Arial" }}>
       <h1>Final Effort</h1>
