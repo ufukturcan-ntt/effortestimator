@@ -58,17 +58,35 @@ export default async function FinalEffortPage({
 
   const projectEffort = [...moduleEffort, ...hypercareEffort];
 
-  const scopeEffort = project.scopeAnswers.map((answer) => {
-    const question = scopeQuestions.find((q) => q.code === answer.question);
+const scopeEffort = project.scopeAnswers.map((answer) => {
+  const question = scopeQuestions.find((q) => q.code === answer.question);
 
-    const option = question?.options.find((o) => o.value === answer.answer);
+  const option = question?.options.find((o) => o.value === answer.answer);
 
-    return {
-      group: "Scope Effort",
-      item: question?.question || answer.question,
-      effort: option?.effort ?? 0,
-    };
-  });
+  let calculatedEffort = option?.effort ?? 0;
+
+  if (question?.answerType === "NUMBER") {
+    const numericValue = Number(answer.answer || 0);
+
+    if (answer.question === "SCOPE_COMPANY_CODE_COUNT") {
+      calculatedEffort = numericValue * 2;
+    }
+
+    if (answer.question === "SCOPE_PLANT_COUNT") {
+      calculatedEffort = numericValue * 2;
+    }
+
+    if (answer.question === "SCOPE_USER_COUNT") {
+      calculatedEffort = Math.ceil(numericValue / 100) * 5;
+    }
+  }
+
+  return {
+    group: "Scope Effort",
+    item: question?.question || answer.question,
+    effort: calculatedEffort,
+  };
+});
 
   const localizationEffort = project.localizations.map((item) => ({
     group: "Localization Effort",
