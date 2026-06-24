@@ -2,23 +2,6 @@ import { prisma } from "@/lib/prisma";
 
 export const dynamic = "force-dynamic";
 
-const modules = [
-  "FI",
-  "CO",
-  "MM",
-  "SD",
-  "PP",
-  "QM",
-  "PM",
-  "PS",
-  "EWM",
-  "TM",
-  "GTS",
-  "MDG",
-  "BW",
-  "BPC"
-];
-
 export default async function ModulePage({
   params,
 }: {
@@ -35,6 +18,16 @@ export default async function ModulePage({
     return <main style={{ padding: 40 }}>Proje bulunamadı.</main>;
   }
 
+  const moduleOptions = await prisma.selectionOption.findMany({
+    where: {
+      category: "MODULE",
+      isActive: true,
+    },
+    orderBy: {
+      sortOrder: "asc",
+    },
+  });
+
   return (
     <main style={{ maxWidth: 800, margin: "40px auto", fontFamily: "Arial" }}>
       <h1>Module Selection</h1>
@@ -43,20 +36,21 @@ export default async function ModulePage({
       <form method="post" action="/api/modules/save">
         <input type="hidden" name="projectId" value={project.id} />
 
-        {modules.map((module) => {
-          const checked = project.modules.some((item) => item.module === module);
+        {moduleOptions.map((module) => {
+          const checked = project.modules.some(
+            (item) => item.module === module.value
+          );
 
           return (
-            <div key={module} style={{ marginBottom: 10 }}>
+            <div key={module.id} style={{ marginBottom: 10 }}>
               <label>
                 <input
                   type="checkbox"
                   name="modules"
-                  value={module}
+                  value={module.value}
                   defaultChecked={checked}
-                />
-                {" "}
-                {module}
+                />{" "}
+                {module.label}
               </label>
             </div>
           );
