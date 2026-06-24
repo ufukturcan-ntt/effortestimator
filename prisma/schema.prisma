@@ -127,3 +127,15 @@ model EffortCatalogue {
 
   @@unique([category, code])
 }
+
+model SelectionOption {
+  id        String   @id @default(cuid())
+  category  String
+  value     String
+  label     String
+  sortOrder Int      @default(0)
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+
+  @@unique([category, value])
+}
