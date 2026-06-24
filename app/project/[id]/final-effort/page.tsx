@@ -9,15 +9,16 @@ export default async function FinalEffortPage({
 }) {
   const { id } = await params;
 
-  const project = await prisma.project.findUnique({
-    where: { id },
-    include: {
-      modules: true,
-      localizations: true,
-      developments: true,
-      hypercareItems: true,
-    },
-  });
+const project = await prisma.project.findUnique({
+  where: { id },
+  include: {
+    modules: true,
+    localizations: true,
+    developments: true,
+    hypercareItems: true,
+    scopeAnswers: true,
+  },
+});
 
   if (!project) {
     return <main style={{ padding: 40 }}>Proje bulunamadı.</main>;
