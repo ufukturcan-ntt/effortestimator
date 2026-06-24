@@ -162,13 +162,10 @@ model ScopeQuestionOption {
   id         String @id @default(cuid())
   questionId String
 
-  value      String
-  label      String
-  effort     Int @default(0)
-  sortOrder  Int @default(0)
+  value     String
+  label     String
+  effort    Int @default(0)
+  sortOrder Int @default(0)
 
-question ScopeQuestion @relation(
-  fields: [questionId],
-  references: [id]
-)
+  question ScopeQuestion @relation(fields: [questionId], references: [id])
 }
